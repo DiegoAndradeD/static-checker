@@ -1,0 +1,29 @@
+// RefactorTest.251 - Arquivo base para testes de refatoração
+PROGRAM TesteRefatoracao;
+DECLARATIONS
+    VARTYPE INTEGER: contador, limite;
+    VARTYPE REAL []: meuVetor;
+    VARTYPE STRING: mensagem;
+ENDDECLARATIONS
+
+FUNCTIONS
+    FUNCTYPE VOID: saudacao (PARAMTYPE STRING: nome)
+        PRINT "Ola, ", nome, "!";
+    ENDFUNCTION
+ENDFUNCTIONS
+
+// Bloco Principal
+limite := 5;
+contador := 0;
+mensagem := "Contando...";
+
+IF (contador < limite) THEN
+    PRINT mensagem; // Imprime a mensagem antes do loop
+    // WHILE (contador < limite) // Comentado para manter o teste mais simples por enquanto
+    // PRINT contador;
+    // contador := contador + 1;
+    // ENDWHILE
+ENDIF
+
+PRINT "Finalizado.";
+ENDPROGRAM

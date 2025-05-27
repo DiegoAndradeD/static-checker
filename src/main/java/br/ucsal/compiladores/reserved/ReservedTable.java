@@ -6,73 +6,44 @@ import java.util.Map;
 import br.ucsal.compiladores.lexer.TokenType;
 
 public class ReservedTable {
+    private final Map<String, TokenType> reservedWords;
 
-    private static final Map<String, TokenType> reservedMap = new HashMap<>();
+    public ReservedTable() {
+        reservedWords = new HashMap<>();
 
-    static {
-        reservedMap.put("program", TokenType.PROGRAM);
-        reservedMap.put("declarations", TokenType.DECLARATIONS);
-        reservedMap.put("endDeclarations", TokenType.END_DECLARATIONS);
-        reservedMap.put("functions", TokenType.FUNCTIONS);
-        reservedMap.put("endFunctions", TokenType.END_FUNCTIONS);
-        reservedMap.put("endProgram", TokenType.END_PROGRAM);
-        reservedMap.put("varType", TokenType.VAR_TYPE);
-        reservedMap.put("funcType", TokenType.FUNC_TYPE);
-        reservedMap.put("endFunction", TokenType.END_FUNCTION);
-        reservedMap.put("paramType", TokenType.PARAM_TYPE);
-
-        reservedMap.put("int", TokenType.INT);
-        reservedMap.put("real", TokenType.REAL);
-        reservedMap.put("integer", TokenType.INTEGER);
-        reservedMap.put("string", TokenType.STRING);
-        reservedMap.put("boolean", TokenType.BOOLEAN);
-        reservedMap.put("character", TokenType.CHARACTER);
-        reservedMap.put("void", TokenType.VOID);
-
-        reservedMap.put("if", TokenType.IF);
-        reservedMap.put("endIf", TokenType.END_IF);
-        reservedMap.put("else", TokenType.ELSE);
-        reservedMap.put("while", TokenType.WHILE);
-        reservedMap.put("endWhile", TokenType.END_WHILE);
-        reservedMap.put("return", TokenType.RETURN);
-        reservedMap.put("break", TokenType.BREAK);
-        reservedMap.put("print", TokenType.PRINT);
-
-        reservedMap.put("true", TokenType.TRUE);
-        reservedMap.put("false", TokenType.FALSE);
-
-        reservedMap.put(":=", TokenType.ASSIGN);
-        reservedMap.put("<=", TokenType.LESS_EQUAL);
-        reservedMap.put("<", TokenType.LESS);
-        reservedMap.put(">", TokenType.GREATER);
-        reservedMap.put(">=", TokenType.GREATER_EQUAL);
-        reservedMap.put("==", TokenType.EQUALS);
-        reservedMap.put("!=", TokenType.NOT_EQUALS);
-        reservedMap.put("#", TokenType.NOT);
-        reservedMap.put("-", TokenType.MINUS);
-        reservedMap.put("+", TokenType.PLUS);
-        reservedMap.put("*", TokenType.MULTIPLY);
-        reservedMap.put("/", TokenType.DIVIDE);
-        reservedMap.put("%", TokenType.MODULO);
-
-        reservedMap.put(";", TokenType.SEMICOLON);
-        reservedMap.put(":", TokenType.COLON);
-        reservedMap.put(",", TokenType.COMMA);
-        reservedMap.put("(", TokenType.LEFT_PAREN);
-        reservedMap.put(")", TokenType.RIGHT_PAREN);
-        reservedMap.put("[", TokenType.LEFT_BRACKET);
-        reservedMap.put("]", TokenType.RIGHT_BRACKET);
-        reservedMap.put("{", TokenType.LEFT_BRACE);
-        reservedMap.put("}", TokenType.RIGHT_BRACE);
-        reservedMap.put("?", TokenType.QUESTION);
-        reservedMap.put(".", TokenType.DOT);
+        reservedWords.put("PROGRAM", TokenType.PRS_PROGRAM);
+        reservedWords.put("ENDPROGRAM", TokenType.PRS_END_PROGRAM);
+        reservedWords.put("DECLARATIONS", TokenType.PRS_DECLARATIONS);
+        reservedWords.put("ENDDECLARATIONS", TokenType.PRS_END_DECLARATIONS);
+        reservedWords.put("FUNCTIONS", TokenType.PRS_FUNCTIONS);
+        reservedWords.put("ENDFUNCTIONS", TokenType.PRS_END_FUNCTIONS);
+        reservedWords.put("VARTYPE", TokenType.PRS_VAR_TYPE);
+        reservedWords.put("FUNCTYPE", TokenType.PRS_FUNC_TYPE);
+        reservedWords.put("PARAMTYPE", TokenType.PRS_PARAM_TYPE);
+        reservedWords.put("INTEGER", TokenType.PRS_INTEGER);
+        reservedWords.put("REAL", TokenType.PRS_REAL);
+        reservedWords.put("STRING", TokenType.PRS_STRING);
+        reservedWords.put("BOOLEAN", TokenType.PRS_BOOLEAN);
+        reservedWords.put("CHARACTER", TokenType.PRS_CHARACTER);
+        reservedWords.put("VOID", TokenType.PRS_VOID);
+        reservedWords.put("TRUE", TokenType.PRS_TRUE);
+        reservedWords.put("FALSE", TokenType.PRS_FALSE);
+        reservedWords.put("IF", TokenType.PRS_IF);
+        reservedWords.put("ELSE", TokenType.PRS_ELSE);
+        reservedWords.put("ENDIF", TokenType.PRS_ENDIF);
+        reservedWords.put("WHILE", TokenType.PRS_WHILE);
+        reservedWords.put("ENDWHILE", TokenType.PRS_ENDWHILE);
+        reservedWords.put("RETURN", TokenType.PRS_RETURN);
+        reservedWords.put("BREAK", TokenType.PRS_BREAK);
+        reservedWords.put("PRINT", TokenType.PRS_PRINT);
+        reservedWords.put("ENDFUNCTION", TokenType.PRS_ENDFUNCTION);
     }
 
-    public static boolean isReserved(String lexeme) {
-        return reservedMap.containsKey(lexeme);
+    public TokenType getTokenType(String lexeme) {
+        return reservedWords.get(lexeme.toUpperCase());
     }
 
-    public static TokenType getTokenType(String lexeme) {
-        return reservedMap.getOrDefault(lexeme, TokenType.UNKNOWN);
+    public boolean isReserved(String lexeme) {
+        return reservedWords.containsKey(lexeme.toUpperCase());
     }
 }

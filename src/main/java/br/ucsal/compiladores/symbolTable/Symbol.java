@@ -2,76 +2,93 @@ package br.ucsal.compiladores.symbolTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import br.ucsal.compiladores.lexer.TokenType;
 
 public class Symbol {
+    private String displayLexeme;
+    private TokenType tokenType;
+    private String category;
+    private String dataType;
 
-    private int index;
-    private String originalLexeme;
-    private String truncatedLexeme;
     private int originalLength;
-    private int truncatedLength;
-    private String type;
-    private List<Integer> appearanceLines;
 
-    public Symbol(int index, String lexeme, int maxLength, int line) {
-        this.index = index;
-        this.originalLexeme = lexeme;
-        this.originalLength = lexeme.length();
-        this.truncatedLexeme = truncate(lexeme, maxLength);
-        this.truncatedLength = this.truncatedLexeme.length();
-        this.type = null;
-        this.appearanceLines = new ArrayList<>();
-        addAppearanceLine(line);
+    private final List<Integer> lineAppearances;
+    private static final int MAX_LINE_APPEARANCES = 5;
+
+    public Symbol(String displayLexeme, TokenType tokenType, int originalLength, int line) {
+        this.displayLexeme = displayLexeme;
+        this.tokenType = tokenType;
+        this.originalLength = originalLength;
+        this.lineAppearances = new ArrayList<>();
+        addAppearance(line);
     }
 
-    private String truncate(String lexeme, int maxLength) {
-        return lexeme.length() <= maxLength ? lexeme : lexeme.substring(0, maxLength);
-    }
-
-    public void addAppearanceLine(int line) {
-        if (appearanceLines.size() < 5 && !appearanceLines.contains(line)) {
-            appearanceLines.add(line);
+    public void addAppearance(int lineNumber) {
+        if (lineAppearances.size() < MAX_LINE_APPEARANCES) {
+            lineAppearances.add(lineNumber);
         }
     }
 
-    public int getIndex() {
-        return index;
+    public String getLexeme() {
+        return displayLexeme;
     }
 
-    public String getOriginalLexeme() {
-        return originalLexeme;
+    public TokenType getTokenType() {
+        return tokenType;
     }
 
-    public String getTruncatedLexeme() {
-        return truncatedLexeme;
+    public String getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
     public int getOriginalLength() {
         return originalLength;
     }
 
-    public int getTruncatedLength() {
-        return truncatedLength;
+    public int getStoredLength() {
+        return displayLexeme.length();
     }
 
-    public String getType() {
-        return type;
+    public List<Integer> getLineAppearances() {
+        return lineAppearances;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getCategory() {
+        return category;
     }
 
-    public List<Integer> getAppearanceLines() {
-        return appearanceLines;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Symbol symbol = (Symbol) o;
+        return Objects.equals(displayLexeme, symbol.displayLexeme);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(displayLexeme);
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "Symbol[%d] lexeme='%s' (orig: %d chars, trunc: %d chars), type='%s', lines=%s",
-                index, truncatedLexeme, originalLength, truncatedLength,
-                (type != null ? type : "undefined"),
-                appearanceLines.toString());
+        return "Lexeme: " + displayLexeme +
+                ", Codigo: " + tokenType.name() +
+                ", QtdCharAntesTrunc: " + originalLength +
+                ", QtdCharDepoisTrunc: " + getStoredLength() +
+                ", TipoSimb: " + (dataType != null ? dataType : "N/D") +
+                ", Linhas: " + lineAppearances.toString();
     }
 }

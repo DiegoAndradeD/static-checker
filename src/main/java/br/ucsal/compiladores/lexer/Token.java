@@ -1,26 +1,30 @@
 package br.ucsal.compiladores.lexer;
 
 public class Token {
-    private String lexeme;
-    private TokenType type;
-    private int line;
-    private int column;
-    private Integer symbolIndex;
+    private final TokenType type;
+    private final String lexeme;
+    private final int line;
+    private final int column;
+    private final Integer symbolIndex;
 
-    public Token(String lexeme, TokenType type, int line, int column) {
-        this.lexeme = lexeme;
+    public Token(TokenType type, String lexeme, int line, int column, Integer symbolIndex) {
         this.type = type;
+        this.lexeme = lexeme;
         this.line = line;
         this.column = column;
-        this.symbolIndex = null;
+        this.symbolIndex = symbolIndex;
     }
 
-    public String getLexeme() {
-        return lexeme;
+    public Token(TokenType type, String lexeme, int line, int column) {
+        this(type, lexeme, line, column, null);
     }
 
     public TokenType getType() {
         return type;
+    }
+
+    public String getLexeme() {
+        return lexeme;
     }
 
     public int getLine() {
@@ -35,18 +39,10 @@ public class Token {
         return symbolIndex;
     }
 
-    public void setSymbolIndex(Integer symbolIndex) {
-        this.symbolIndex = symbolIndex;
-    }
-
     @Override
     public String toString() {
-        return String.format(
-                "Token[type=%s, lexeme='%s', line=%d, column=%d%s]",
-                type,
-                lexeme,
-                line,
-                column,
-                (symbolIndex != null ? ", symbolIndex=" + symbolIndex : ""));
+        String symbolIdxStr = (symbolIndex != null) ? ", IndexTabSimb: " + symbolIndex : "";
+        return String.format("Lexeme: %s, Código: %s%s, Linha: %d, Coluna: %d",
+                lexeme, type.name(), symbolIdxStr, line, column);
     }
 }

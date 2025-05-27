@@ -1,0 +1,42 @@
+Codigo da Equipe: EQ08
+Componentes:
+  Gabriel Da Silva Azevedo; gabrielsilva.azevedo@ucsal.edu.br; +55 71 9109-7114
+  Denilson Xavier Oliveira; denilson.oliveira@ucsal.edu.br; +55 75 9902-5074
+  Joao Victor Aziz Lima; joaovictor.santana@ucsal.edu.br; +55 71 9676-4583
+  Diego Andrade Deiró; diego.deiro@ucsal.edu.br; +55 71 8328-3791
+
+RELATÓRIO DA TABELA DE SÍMBOLOS
+Texto fonte analisado: Teste.251
+
+Entrada: 1, Codigo: IDN02, Lexeme: TESTEREFATORACAO, 
+  QtdCharAntesTrunc: 16, QtdCharDepoisTrunc: 16, 
+  TipoSimb: programName, Linhas: {2}.
+
+Entrada: 2, Codigo: IDN02, Lexeme: CONTADOR, 
+  QtdCharAntesTrunc: 8, QtdCharDepoisTrunc: 8, 
+  TipoSimb: IN, Linhas: (4, 17, 20).
+
+Entrada: 3, Codigo: IDN02, Lexeme: LIMITE, 
+  QtdCharAntesTrunc: 6, QtdCharDepoisTrunc: 6, 
+  TipoSimb: IN, Linhas: (4, 16, 20).
+
+Entrada: 4, Codigo: IDN02, Lexeme: MEUVETOR, 
+  QtdCharAntesTrunc: 8, QtdCharDepoisTrunc: 8, 
+  TipoSimb: AF, Linhas: {5}.
+
+Entrada: 5, Codigo: IDN02, Lexeme: MENSAGEM, 
+  QtdCharAntesTrunc: 8, QtdCharDepoisTrunc: 8, 
+  TipoSimb: ST, Linhas: (6, 18, 21).
+
+Entrada: 6, Codigo: IDN02, Lexeme: SAUDACAO, 
+  QtdCharAntesTrunc: 8, QtdCharDepoisTrunc: 8, 
+  TipoSimb: VD, Linhas: {10}.
+
+Entrada: 7, Codigo: IDN02, Lexeme: NOME, 
+  QtdCharAntesTrunc: 4, QtdCharDepoisTrunc: 4, 
+  TipoSimb: ST, Linhas: (10, 11).
+
+Entrada: 8, Codigo: IDN02, Lexeme: THEN, 
+  QtdCharAntesTrunc: 4, QtdCharDepoisTrunc: 4, 
+  TipoSimb: variable, Linhas: {20}.
+
