@@ -1,0 +1,19 @@
+PROGRAM Pr@ogramaComNomeMuitoMuitoMuitoLongoQueExcedeOsLimitesParaTesteFinal; // Mais de 35 chars
+DECLARATIONS
+    // Identificador com exatamente 32 caracteres válidos
+    VARTYPE INTEGER: IDValidoComExatos32Caracteres123;
+    // Identificador com 35 caracteres válidos
+    VARTYPE REAL: IDValidoComExatos35Caracteres1234567;
+    // Identificador com mais de 35 caracteres válidos
+    VARTYPE STRING: IDMuitoLongoValidoComMaisDe35Chars1234567890;
+    // Identificadores com caracteres a serem filtrados
+    VARTYPE BOOLEAN: var~ComFiltro, id@Com#Outro^Filtro;
+ENDDECLARATIONS
+
+var~ComFiltro := TRUE;
+id@Com#Outro^Filtro := FALSE;
+IDValidoComExatos32Caracteres123 := 12345678901234567890123456789012; // Número longo
+IDMuitoLongoValidoComMaisDe35Chars1234567890 := "Teste";
+
+PRINT IDValidoComExatos35Caracteres1234567;
+ENDPROGRAM

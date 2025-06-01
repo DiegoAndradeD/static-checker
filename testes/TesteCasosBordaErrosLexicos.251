@@ -1,0 +1,29 @@
+// Apenas comentários inicialmente
+/* Bloco de comentário
+   que não é fechado... até o fim do arquivo, mas vamos colocar um ENDPROGRAM depois
+
+PROGRAM TesteErrosLexicos; // Este PROGRAM não será o primeiro token efetivo se o comentário acima não for fechado
+ DECLARATIONS
+  VARTYPE STRING: s1, s2;
+  VARTYPE CHARACTER: c1, c2, c3, c4;
+ ENDDECLARATIONS
+
+ s1 := "String normal";
+ s2 := "String não fechada na linha
+ c1 := 'A';
+ c2 := '';   // Char vazio
+ c3 := 'AB'; // Char com múltiplos caracteres
+ c4 := '1';  // Char com não-letra
+ // c5 := 'a; // Char não fechado na linha (o ; é o problema)
+
+ @@@ // Caracteres inválidos soltos
+ ^^^ // Mais caracteres inválidos
+
+PRINT s1;
+
+ENDPROGRAM
+*/ // Fechando o comentário de bloco aqui para testar o que está dentro
+
+PROGRAM SegundoProgramaParaTestarIsolados;
+  @ variavelIsolada;
+ENDPROGRAM

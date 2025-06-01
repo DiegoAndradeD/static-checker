@@ -1,0 +1,48 @@
+PROGRAM TesteTipos;
+DECLARATIONS
+    VARTYPE INTEGER: iVar;
+    VARTYPE REAL: rVar;
+    VARTYPE STRING: sVar;
+    VARTYPE BOOLEAN: bVar;
+    VARTYPE CHARACTER: cVar;
+    // VARTYPE VOID: voidVar; // Declaração de variável VOID não faz sentido, mas testaria erro se tentado
+
+    VARTYPE INTEGER []: iVetor;
+    VARTYPE REAL []: rVetor;
+    VARTYPE STRING []: sVetor;
+    VARTYPE BOOLEAN []: bVetor;
+    VARTYPE CHARACTER []: cVetor;
+    // VARTYPE VOID []: voidVetor; // Erro semântico esperado
+ENDDECLARATIONS
+
+FUNCTIONS
+    FUNCTYPE INTEGER: funcInt (PARAMTYPE REAL: pr, PARAMTYPE BOOLEAN: pb)
+        RETURN 1;
+    ENDFUNCTION
+
+    FUNCTYPE REAL: funcReal (PARAMTYPE STRING: ps)
+        RETURN 1.0;
+    ENDFUNCTION
+
+    FUNCTYPE STRING: funcString (PARAMTYPE CHARACTER: pc)
+        RETURN "teste";
+    ENDFUNCTION
+
+    FUNCTYPE BOOLEAN: funcBool (PARAMTYPE INTEGER: pi)
+        RETURN TRUE;
+    ENDFUNCTION
+
+    FUNCTYPE CHARACTER: funcChar (PARAMTYPE INTEGER: pi)
+        RETURN 'c';
+    ENDFUNCTION
+
+    FUNCTYPE VOID: funcVoid (PARAMTYPE INTEGER: pi)
+        PRINT pi;
+        RETURN; // Return void
+    ENDFUNCTION
+ENDFUNCTIONS
+
+iVar := funcInt(0.5, FALSE);
+sVar := "Fim";
+PRINT sVar;
+ENDPROGRAM

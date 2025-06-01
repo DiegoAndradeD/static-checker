@@ -266,6 +266,17 @@ public class Parser {
                 match(TokenType.IDN_CHAR_CONST)) {
             System.out.print(currentToken.getLexeme());
             advance();
+        } else if (match(TokenType.SRS_LEFT_PARENTHESIS)) {
+            consume(TokenType.SRS_LEFT_PARENTHESIS);
+            System.out.print("(SubExpressao: ");
+            parseAritmExp();
+            if (match(TokenType.SRS_RIGHT_PARENTHESIS)) {
+                consume(TokenType.SRS_RIGHT_PARENTHESIS);
+            } else {
+                System.err.println(
+                        "Erro Sintático: Esperado ')' para fechar sub-expressão na linha " + currentToken.getLine());
+            }
+            System.out.print(")");
         } else {
             System.out.print("<<Fator Inválido: " + currentToken.getLexeme() + ">>");
         }

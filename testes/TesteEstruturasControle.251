@@ -1,0 +1,36 @@
+PROGRAM TesteAninhado;
+DECLARATIONS
+    VARTYPE INTEGER: i, j, k, limiteSup, limiteInf;
+    VARTYPE BOOLEAN: condicao;
+ENDDECLARATIONS
+
+limiteSup := 10;
+limiteInf := 0;
+i := 0;
+condicao := TRUE;
+
+WHILE (i < limiteSup)
+    PRINT "Loop Externo i: ", i;
+    j := 5;
+    IF (i == 3) THEN
+        PRINT "i é 3, testando break interno";
+        WHILE (condicao == TRUE)
+            PRINT "Loop Interno, j: ", j;
+            IF (j < 2) THEN
+                PRINT "j < 2, saindo do loop interno com BREAK";
+                BREAK; // Sai do WHILE interno
+            ENDIF
+            j := j - 1;
+        ENDWHILE
+        PRINT "Após loop interno";
+    ELSE
+        IF (i > 7) THEN
+            PRINT "i > 7, saindo do loop externo com BREAK";
+            BREAK; // Sai do WHILE externo
+        ENDIF
+    ENDIF
+    i := i + 1;
+ENDWHILE
+
+PRINT "Fim do programa";
+ENDPROGRAM

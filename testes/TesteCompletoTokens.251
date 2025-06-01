@@ -1,0 +1,45 @@
+// TesteCompletoTokens.251
+PROGRAM Teste_Tokens_Completo; // IDN_PROGRAM_NAME (via categoria)
+DECLARATIONS
+    VARTYPE INTEGER: varInt1, var_Int2;
+    VARTYPE REAL: varReal1, var_Real_2;
+    VARTYPE STRING: varString;
+    VARTYPE BOOLEAN: varBool;
+    VARTYPE CHARACTER: varChar;
+    VARTYPE INTEGER []: vetorInt;
+    VARTYPE REAL []: vetorReal;
+ENDDECLARATIONS
+
+FUNCTIONS
+    FUNCTYPE VOID: funcaoTeste (PARAMTYPE INTEGER: pInt, PARAMTYPE REAL: pReal)
+        // Corpo da função com vários comandos e símbolos
+        varInt1 := 100 + (200 * 3) / 2 % 5;
+        varReal1 := 0.5 + 123.45e-2 + .75 + 10.E+1;
+        varString := "Ola @ Mundo $ _ . \n Teste"; // \n dentro da string será literal
+        varBool := TRUE;
+        varChar := 'A';
+
+        IF (varInt1 > pInt) THEN
+            PRINT varInt1;
+        ELSE
+            PRINT pInt;
+        ENDIF
+
+        WHILE (varBool == TRUE # varBool != FALSE) // Usando # como alias para !=
+            varBool := FALSE;
+            IF (varInt1 < 0) THEN
+                BREAK;
+            ENDIF
+        ENDWHILE
+        RETURN; // Return sem expressão
+    ENDFUNCTION
+ENDFUNCTIONS
+
+// Comandos no bloco principal
+var_Int2 := varInt1;
+/* Comentário de bloco
+   com várias linhas
+   e símbolos :;()[]{}+-*/%?=!#<>
+*/
+varReal1 := var_Real_2; // Assumindo que var_Real_2 seria inicializada ou usada de outra forma
+ENDPROGRAM

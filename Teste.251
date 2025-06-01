@@ -1,29 +1,40 @@
-// RefactorTest.251 - Arquivo base para testes de refatoração
-PROGRAM TesteRefatoracao;
+PROGRAM MeuProgramaDefault;
 DECLARATIONS
-    VARTYPE INTEGER: contador, limite;
-    VARTYPE REAL []: meuVetor;
-    VARTYPE STRING: mensagem;
+    VARTYPE INTEGER: idade, ano;
+    VARTYPE STRING: saudacaoMsg;
+    VARTYPE BOOLEAN: ehValido;
+    VARTYPE REAL []: notas; // Um vetor simples
 ENDDECLARATIONS
 
 FUNCTIONS
-    FUNCTYPE VOID: saudacao (PARAMTYPE STRING: nome)
-        PRINT "Ola, ", nome, "!";
+    FUNCTYPE VOID: imprimirStatus (PARAMTYPE BOOLEAN: status)
+        IF (status == TRUE) THEN
+            PRINT "Status: Valido";
+        ELSE
+            PRINT "Status: Invalido";
+        ENDIF
+        RETURN;
     ENDFUNCTION
 ENDFUNCTIONS
 
-// Bloco Principal
-limite := 5;
-contador := 0;
-mensagem := "Contando...";
+// Bloco Principal de Comandos
+idade := 25;
+ano := 2025;
+saudacaoMsg := "Bem-vindo ao Teste Padrao!";
+ehValido := TRUE;
 
-IF (contador < limite) THEN
-    PRINT mensagem; // Imprime a mensagem antes do loop
-    // WHILE (contador < limite) // Comentado para manter o teste mais simples por enquanto
-    // PRINT contador;
-    // contador := contador + 1;
-    // ENDWHILE
+/*
+  Este é um comentário de bloco
+  para verificar o filtro.
+*/
+
+PRINT saudacaoMsg;
+PRINT "Idade: ", idade, ", Ano: ", ano;
+
+imprimirStatus(ehValido); // Chamada de função (não será "executada", mas parseada)
+
+IF (idade > 18) THEN
+    PRINT "Maior de idade.";
 ENDIF
 
-PRINT "Finalizado.";
 ENDPROGRAM
