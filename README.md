@@ -161,6 +161,119 @@ Gera os relatórios `.LEX` e `.TAB`.
 * **Cobertura Gramatical:** O `Parser` foca nas estruturas principais e não implementa todas as nuances ou produções alternativas da gramática formal.
 * **Filtro de Caracteres Inválidos:** Embora implementado para identificadores, sua aplicação e o impacto exato no `originalLength` para outros tipos de átomos (como números) não foram exaustivamente explorados.
 
+# Exemplo Detalhado: Teste Padrão (Teste.251)
+
+Para facilitar a verificação rápida da funcionalidade principal do Static Checker, um arquivo `Teste.251` é utilizado. Este arquivo contém uma amostra representativa das estruturas básicas da linguagem CangaCode2025-1.
+
+## Código do Teste.251
+
+```pascal
+PROGRAM MeuProgramaDefault;
+DECLARATIONS
+    VARTYPE INTEGER: idade, ano;
+    VARTYPE STRING: saudacaoMsg;
+    VARTYPE BOOLEAN: ehValido;
+    VARTYPE REAL []: notas; 
+ENDDECLARATIONS
+
+FUNCTIONS
+    FUNCTYPE VOID: imprimirStatus (PARAMTYPE BOOLEAN: status)
+        IF (status == TRUE) THEN
+            PRINT "Status: Valido";
+        ELSE
+            PRINT "Status: Invalido";
+        ENDIF
+        RETURN;
+    ENDFUNCTION
+ENDFUNCTIONS
+
+// Bloco Principal de Comandos
+idade := 25;
+ano := 2025;
+saudacaoMsg := "Bem-vindo ao Teste Padrao!";
+ehValido := TRUE;
+
+/*
+  Este é um comentário de bloco
+  para verificar o filtro.
+*/
+
+PRINT saudacaoMsg;
+PRINT "Idade: ", idade, ", Ano: ", ano;
+
+imprimirStatus(ehValido); // Chamada de procedimento/função
+
+IF (idade > 18) THEN
+    PRINT "Maior de idade.";
+ENDIF
+
+ENDPROGRAM
+```
+
+## Saída Esperada e Explicação
+
+Ao processar o `Teste.251` com o Static Checker, a saída será semelhante à seguinte:
+
+### Saída do Lexer (Tokens Encontrados)
+
+O analisador léxico (Lexer) deve identificar corretamente todos os tokens do arquivo, incluindo:
+
+- **Palavras reservadas**: `PROGRAM`, `DECLARATIONS`, `VARTYPE`, `INTEGER`, `STRING`, `BOOLEAN`, `REAL`, `FUNCTIONS`, `FUNCTYPE`, `VOID`, `PARAMTYPE`, `IF`, `THEN`, `PRINT`, `ELSE`, `ENDIF`, `RETURN`, `ENDFUNCTION`, `ENDFUNCTIONS`, `ENDPROGRAM`, `TRUE`
+- **Identificadores**: `MEUPROGRAMADEFAULT`, `idade`, `ano`, `saudacaoMsg`, `ehValido`, `notas`, `imprimirStatus`, `status`
+- **Símbolos**: `:=`, `;`, `,`, `(`, `)`, `[]`, `==`, `>`
+- **Constantes**: `25`, `2025`, `"Bem-vindo ao Teste Padrao!"`, `"Status: Valido"`, `"Status: Invalido"`, `"Maior de idade."`
+- **Comentários** de linha e bloco são corretamente ignorados
+
+A lista de tokens gerada será extensa, mas cada token individual deverá ter seu tipo, lexema, linha e coluna corretamente atribuídos.
+
+### Saída do Parser
+
+O analisador sintático parcial (Parser) processará a estrutura do programa:
+
+#### Declarações
+Todas as declarações de variáveis (escalares e o vetor `notas`) e a declaração da função `imprimirStatus` (incluindo seu parâmetro `status`) serão processadas corretamente. As informações de tipo e categoria serão atualizadas na Tabela de Símbolos.
+
+#### Corpo da Função imprimirStatus
+O comando `IF` interno, os `PRINT`s e o `RETURN` serão parseados com sucesso.
+
+#### Bloco Principal - Comandos Válidos
+
+- As atribuições (`idade := 25;`, etc.) serão processadas corretamente
+- Os comandos `PRINT` (com um ou múltiplos argumentos) serão processados corretamente
+- O comando `IF (idade > 18) THEN ... ENDIF` será processado corretamente
+
+#### Bloco Principal - Explicação do "Erro" na Chamada de Função
+
+> **⚠️ Comportamento Esperado**
+
+A linha `imprimirStatus(ehValido);` no corpo principal do programa gerará a seguinte sequência de mensagens do parser:
+
+```
+Parser: Comando de atribuição para variável 'IMPRIMIRSTATUS'
+Erro Sintático: Esperado ':=' após variável 'IMPRIMIRSTATUS' no comando de atribuição na linha 34
+Parser: Lendo expressão da atribuição:  (Fator: <<Fator Inválido: ;>>) 
+```
+
+**Este comportamento é ESPERADO e CORRETO para o escopo atual do parser.** Eis o motivo:
+
+1. O Lexer corretamente tokeniza `IMPRIMIRSTATUS` como um `IDN_VARIABLE`
+2. O método `parseCommandList` do Parser, ao encontrar um `IDN_VARIABLE` onde um comando é esperado, assume que se trata de um comando de atribuição (ex: `variavel := valor;`)
+3. Ele então chama `parseAssignmentCommand()`. Este método espera que o próximo token após o `IDN_VARIABLE` (`IMPRIMIRSTATUS`) seja o operador de atribuição `:=`
+4. No entanto, o próximo token é `(`. Como não é `:=`, o `parseAssignmentCommand` reporta "Erro Sintático: Esperado ':='..."
+5. A tentativa de ler a expressão subsequente falha, pois o que resta não forma uma expressão válida após o erro
+
+**Razão Técnica**: A linguagem CangaCode2025-1, conforme a gramática formal fornecida (Apêndice B), não define um "Comando de Chamada de Procedimento" explícito do tipo `nomeFuncao(parametros);`. Chamadas de função são geralmente fatores dentro de expressões (`Factor -> Variable -> functionName ( Parameters )`).
+
+Para que `imprimirStatus(ehValido);` fosse um comando autônomo válido, o Parser precisaria de uma regra específica para reconhecê-lo (ex: `Command -> ProcedureCall`). Como essa regra não está implementada (pois não está explicitamente na gramática de `Command`), o parser corretamente identifica que a construção não corresponde a nenhum dos seus padrões de comando conhecidos, e o erro sinaliza essa incompatibilidade estrutural.
+
+**Portanto, este "erro" demonstra que o parser está aplicando suas regras de forma consistente.**
+
+#### Finalização
+O `ENDPROGRAM` será encontrado e o processo será concluído.
+
+---
+
+
 ## Autor(es)
 * [Diego Andrade Deiró]
 * [Joao Victor Aziz Lima]
