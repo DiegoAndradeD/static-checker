@@ -75,13 +75,13 @@ public class App {
 
     private static FileInputDetails getFileDetailsFromUser(int choice, Scanner scanner) {
         String baseFileName = null;
-        String directoryPath = ".";
+        String directoryPath = Constants.APP_ROOT_DIRECTORY;
         String inputFilePath = null;
 
         switch (choice) {
             case 1:
                 baseFileName = "Teste";
-                directoryPath = ".";
+                directoryPath = Constants.APP_ROOT_DIRECTORY;
                 inputFilePath = Paths.get(directoryPath, baseFileName + Constants.FILE_EXTENSION).toAbsolutePath()
                         .toString();
                 System.out.println("Usando arquivo de teste padrão: " + inputFilePath);
@@ -94,7 +94,7 @@ public class App {
                     System.err.println("Nome do arquivo não pode ser vazio.");
                     return null;
                 }
-                directoryPath = ".";
+                directoryPath = Constants.APP_ROOT_DIRECTORY;
                 inputFilePath = Paths.get(directoryPath, baseFileName + Constants.FILE_EXTENSION).toAbsolutePath()
                         .toString();
                 System.out.println("Procurando por: " + inputFilePath);
@@ -129,7 +129,7 @@ public class App {
                 baseFileName = fileNameWithExt.substring(0, fileNameWithExt.length() - 4);
 
                 Path parentDir = absolutePathToTest.getParent();
-                directoryPath = (parentDir != null) ? parentDir.toString() : ".";
+                directoryPath = (parentDir != null) ? parentDir.toString() : Constants.APP_ROOT_DIRECTORY;
 
                 System.out.println("Usando arquivo: " + inputFilePath);
                 return new FileInputDetails(baseFileName, directoryPath, inputFilePath);
