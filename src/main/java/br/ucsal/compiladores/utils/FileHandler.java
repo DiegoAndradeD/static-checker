@@ -19,7 +19,7 @@ public class FileHandler {
     private char currentChar;
     private boolean justCrossedLine;
 
-    public static final char EOF_CHAR = '\0';
+    public static final char END_OF_FILE_CHAR = '\0';
 
     public FileHandler(String baseFileName, String directoryPath) throws IOException {
         this.filePath = Paths.get(directoryPath, baseFileName + Constants.FILE_EXTENSION).toString();
@@ -69,7 +69,7 @@ public class FileHandler {
             justCrossedLine = false;
 
             if (currentLineIndex >= lines.size()) {
-                this.currentChar = EOF_CHAR;
+                this.currentChar = END_OF_FILE_CHAR;
                 return;
             }
             String currentLineContent = lines.get(currentLineIndex);
@@ -80,7 +80,7 @@ public class FileHandler {
         currentCharIndexInLine++;
 
         if (currentLineIndex >= lines.size()) {
-            this.currentChar = EOF_CHAR;
+            this.currentChar = END_OF_FILE_CHAR;
             return;
         }
 
@@ -104,7 +104,7 @@ public class FileHandler {
             peekCol = 0;
 
             if (peekLine >= lines.size()) {
-                return EOF_CHAR;
+                return END_OF_FILE_CHAR;
             }
             String currentLineContent = lines.get(peekLine);
             return currentLineContent.isEmpty() ? '\n' : currentLineContent.charAt(peekCol);
@@ -112,7 +112,7 @@ public class FileHandler {
 
         peekCol++;
         if (peekLine >= lines.size()) {
-            return EOF_CHAR;
+            return END_OF_FILE_CHAR;
         }
 
         String currentLineContent = lines.get(peekLine);

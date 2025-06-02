@@ -53,7 +53,7 @@ public class ReportGenerator {
             writer.write(getHeader("RELATÓRIO DA ANÁLISE LÉXICA"));
 
             for (Token token : tokens) {
-                if (token.getType() == TokenType.EOF)
+                if (token.getType() == TokenType.END_OF_FILE)
                     continue;
 
                 writer.write("Lexeme: " + token.getLexeme() + ", ");

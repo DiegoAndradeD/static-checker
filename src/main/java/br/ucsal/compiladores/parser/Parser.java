@@ -33,7 +33,7 @@ public class Parser {
         if (!tokens.isEmpty()) {
             this.currentToken = tokens.get(currentTokenIndex);
         } else {
-            this.currentToken = new Token(TokenType.EOF, "", 0, 0);
+            this.currentToken = new Token(TokenType.END_OF_FILE, "", 0, 0);
         }
     }
 
@@ -134,7 +134,7 @@ public class Parser {
             if (dataType.equals("ERR_ARRAY_OF_VOID")) {
                 System.err.println("Erro Semântico: Declaração de array do tipo VOID não é permitida na linha "
                         + typeSpecToken.getLine());
-                while (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.EOF) {
+                while (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.END_OF_FILE) {
                     advance();
                 }
                 if (match(TokenType.SRS_SEMICOLON))
@@ -164,7 +164,7 @@ public class Parser {
                                         + currentToken.getLine());
                         while (currentToken.getType() != TokenType.SRS_COMMA &&
                                 currentToken.getType() != TokenType.SRS_SEMICOLON &&
-                                currentToken.getType() != TokenType.EOF) {
+                                currentToken.getType() != TokenType.END_OF_FILE) {
                             advance();
                         }
                     }
@@ -220,7 +220,7 @@ public class Parser {
                                     + currentToken.getLine());
                             while (currentToken.getType() != TokenType.SRS_COMMA &&
                                     currentToken.getType() != TokenType.SRS_RIGHT_PARENTHESIS &&
-                                    currentToken.getType() != TokenType.EOF) {
+                                    currentToken.getType() != TokenType.END_OF_FILE) {
                                 advance();
                             }
                         }
@@ -317,7 +317,7 @@ public class Parser {
         } else {
             System.err.println("Erro Sintático: Esperado ':=' após variável '" + variableToken.getLexeme() +
                     "' no comando de atribuição na linha " + variableToken.getLine());
-            while (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.EOF) {
+            while (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
         }
@@ -370,7 +370,7 @@ public class Parser {
     private void parseReturnCommand() {
         Token returnToken = consume(TokenType.PRS_RETURN);
         System.out.println("Parser: Comando RETURN encontrado na linha " + returnToken.getLine());
-        if (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.EOF) {
+        if (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.END_OF_FILE) {
             System.out.print("Parser: Lendo expressão do RETURN: ");
             parseAritmExp();
             System.out.println();
@@ -393,7 +393,7 @@ public class Parser {
             System.err.println("Erro Sintático: Esperado '(' após IF na linha " + ifToken.getLine());
             while (currentToken.getType() != TokenType.PRS_ENDIF &&
                     currentToken.getType() != TokenType.SRS_SEMICOLON &&
-                    currentToken.getType() != TokenType.EOF) {
+                    currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
             if (match(TokenType.PRS_ENDIF))
@@ -409,7 +409,7 @@ public class Parser {
         if (!match(TokenType.SRS_RIGHT_PARENTHESIS)) {
             System.err.println("Erro Sintático: Esperado ')' para fechar condição do IF na linha " + ifToken.getLine()
                     + ". Encontrado: " + currentToken);
-            while (currentToken.getType() != TokenType.PRS_ENDIF && currentToken.getType() != TokenType.EOF) {
+            while (currentToken.getType() != TokenType.PRS_ENDIF && currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
             if (match(TokenType.PRS_ENDIF))
@@ -447,7 +447,7 @@ public class Parser {
 
         if (!match(TokenType.SRS_LEFT_PARENTHESIS)) {
             System.err.println("Erro Sintático: Esperado '(' após WHILE na linha " + whileToken.getLine());
-            while (currentToken.getType() != TokenType.PRS_ENDWHILE && currentToken.getType() != TokenType.EOF) {
+            while (currentToken.getType() != TokenType.PRS_ENDWHILE && currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
             if (match(TokenType.PRS_ENDWHILE))
@@ -463,7 +463,7 @@ public class Parser {
         if (!match(TokenType.SRS_RIGHT_PARENTHESIS)) {
             System.err.println("Erro Sintático: Esperado ')' para fechar condição do WHILE na linha "
                     + whileToken.getLine() + ". Encontrado: " + currentToken);
-            while (currentToken.getType() != TokenType.PRS_ENDWHILE && currentToken.getType() != TokenType.EOF) {
+            while (currentToken.getType() != TokenType.PRS_ENDWHILE && currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
             if (match(TokenType.PRS_ENDWHILE))
@@ -497,7 +497,7 @@ public class Parser {
 
     private void parseCommandList(TokenType... stopTokens) {
         Set<TokenType> stops = Set.of(stopTokens);
-        while (currentToken.getType() != TokenType.EOF && !stops.contains(currentToken.getType())) {
+        while (currentToken.getType() != TokenType.END_OF_FILE && !stops.contains(currentToken.getType())) {
             if (match(TokenType.IDN_VARIABLE)) {
                 parseAssignmentCommand();
             } else if (match(TokenType.PRS_PRINT)) {
@@ -544,7 +544,7 @@ public class Parser {
             System.err.println("Erro Sintático: Programa deve iniciar com a palavra reservada 'PROGRAM' na linha "
                     + currentToken.getLine());
             while (!match(TokenType.PRS_DECLARATIONS, TokenType.PRS_FUNCTIONS, TokenType.PRS_END_PROGRAM,
-                    TokenType.EOF)) {
+                    TokenType.END_OF_FILE)) {
                 advance();
             }
         }
@@ -645,7 +645,7 @@ public class Parser {
         parseDeclarationsBlock();
         parseFunctionsBlock();
 
-        if (currentToken.getType() != TokenType.PRS_END_PROGRAM && currentToken.getType() != TokenType.EOF) {
+        if (currentToken.getType() != TokenType.PRS_END_PROGRAM && currentToken.getType() != TokenType.END_OF_FILE) {
             System.out.println("Parser: Iniciando processamento de comandos do bloco principal.");
             parseCommandList(TokenType.PRS_END_PROGRAM);
         }
@@ -654,13 +654,13 @@ public class Parser {
             consume(TokenType.PRS_END_PROGRAM);
             System.out.println("Parser: Fim do programa (ENDPROGRAM) encontrado.");
         } else {
-            if (currentToken.getType() != TokenType.EOF) {
+            if (currentToken.getType() != TokenType.END_OF_FILE) {
                 System.err.println("Erro Sintático: Esperado ENDPROGRAM para finalizar o programa na linha "
                         + currentToken.getLine() + ". Encontrado: " + currentToken.getType());
             }
         }
 
-        if (currentToken.getType() != TokenType.EOF) {
+        if (currentToken.getType() != TokenType.END_OF_FILE) {
             System.err.println("Erro Sintático: Tokens residuais após o esperado fim do programa, começando com '"
                     + currentToken.getLexeme() + "' na linha " + currentToken.getLine());
         }
