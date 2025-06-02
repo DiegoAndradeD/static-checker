@@ -32,8 +32,8 @@ public class FileHandler {
         this.lines = new ArrayList<>();
         
         try (BufferedReader reader = new BufferedReader(new FileReader(this.filePath))) {
-            String line = reader.readLine();
-            while (line != null) {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 this.lines.add(line);
             }
         }
