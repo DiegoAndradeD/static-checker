@@ -63,7 +63,7 @@ public enum TokenType {
     IDN_CHAR_CONST("IDN07"),
 
     // Controle
-    EOF("EOF00"),
+    END_OF_FILE("EOF00"),
     UNKNOWN("ERR01");
 
     private final String code;

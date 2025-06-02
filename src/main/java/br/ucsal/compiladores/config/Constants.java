@@ -22,8 +22,10 @@ public class Constants {
     public static final int MAX_SYMBOL_LEXEME_STORAGE_LENGTH = 35;
 
     public static final Set<Character> DELIMITERS_OR_TOKEN_STARTERS = Set.of(
-            ' ', '\t', '\n', '\r', FileHandler.EOF_CHAR,
+            ' ', '\t', '\n', '\r', FileHandler.END_OF_FILE_CHAR,
             ';', ',', ':', '(', ')', '[', ']', '{', '}',
             '+', '-', '*', '/', '%', '?', '=', '!', '#', '<', '>',
             '"', '\'');
+
+    public static final String APP_ROOT_DIRECTORY = ".";
 }

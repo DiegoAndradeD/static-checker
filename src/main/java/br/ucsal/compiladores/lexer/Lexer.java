@@ -24,14 +24,14 @@ public class Lexer {
         do {
             token = getNextToken();
             tokens.add(token);
-        } while (token.getType() != TokenType.EOF);
+        } while (token.getType() != TokenType.END_OF_FILE);
         return tokens;
     }
 
     private void skipWhitespaceAndComments() {
         while (true) {
             char currentChar = fileHandler.getCurrentChar();
-            if (currentChar == FileHandler.EOF_CHAR)
+            if (currentChar == FileHandler.END_OF_FILE_CHAR)
                 break;
             if (currentChar == ' ' || currentChar == '\t' || currentChar == '\n' || currentChar == '\r') {
                 fileHandler.advance();
@@ -43,7 +43,7 @@ public class Lexer {
                     int commentLineStart = fileHandler.getCurrentLineNumber();
                     fileHandler.advance();
                     fileHandler.advance();
-                    while (fileHandler.getCurrentChar() != FileHandler.EOF_CHAR
+                    while (fileHandler.getCurrentChar() != FileHandler.END_OF_FILE_CHAR
                             && fileHandler.getCurrentLineNumber() == commentLineStart) {
                         fileHandler.advance();
                     }
@@ -53,7 +53,7 @@ public class Lexer {
                     fileHandler.advance();
                     while (true) {
                         char insideBlockChar = fileHandler.getCurrentChar();
-                        if (insideBlockChar == FileHandler.EOF_CHAR)
+                        if (insideBlockChar == FileHandler.END_OF_FILE_CHAR)
                             break;
                         if (insideBlockChar == '*' && fileHandler.peek() == '/') {
                             fileHandler.advance();
@@ -70,7 +70,7 @@ public class Lexer {
     }
 
     private boolean isCharToFilter(char c) {
-        if (c == FileHandler.EOF_CHAR)
+        if (c == FileHandler.END_OF_FILE_CHAR)
             return false;
         if (Character.isLetterOrDigit(c) || c == '_')
             return false;
@@ -93,8 +93,8 @@ public class Lexer {
         int tokenColumn = fileHandler.getCurrentColumnNumber();
         char currentChar = fileHandler.getCurrentChar();
 
-        if (currentChar == FileHandler.EOF_CHAR) {
-            return new Token(TokenType.EOF, "", tokenLine, tokenColumn);
+        if (currentChar == FileHandler.END_OF_FILE_CHAR) {
+            return new Token(TokenType.END_OF_FILE, "", tokenLine, tokenColumn);
         }
 
         Token token;
@@ -250,7 +250,7 @@ public class Lexer {
             char currentLocalChar = fileHandler.getCurrentChar();
 
             while (currentLocalChar != '"' &&
-                    currentLocalChar != FileHandler.EOF_CHAR &&
+                    currentLocalChar != FileHandler.END_OF_FILE_CHAR &&
                     fileHandler.getCurrentLineNumber() == tokenLine) {
                 sb.append(currentLocalChar);
                 fileHandler.advance();
