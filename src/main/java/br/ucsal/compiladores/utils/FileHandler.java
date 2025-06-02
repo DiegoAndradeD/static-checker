@@ -30,14 +30,16 @@ public class FileHandler {
         }
 
         this.lines = new ArrayList<>();
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(this.filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+            String line = reader.readLine();
+            while (line != null) {
                 this.lines.add(line);
             }
         } catch (Exception e) {
             System.err.print("Não foi possível ler o arquivo. Verifique o conteúdo e tente novamente.");
         }
+
         this.currentLineIndex = 0;
         this.currentCharIndexInLine = -1;
         this.justCrossedLine = false;
