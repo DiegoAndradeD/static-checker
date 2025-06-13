@@ -1,28 +1,21 @@
 package br.ucsal.compiladores;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
 
 import br.ucsal.compiladores.config.Constants;
-import br.ucsal.compiladores.lexer.Lexer;
-import br.ucsal.compiladores.lexer.Token;
 import br.ucsal.compiladores.parser.Parser;
-import br.ucsal.compiladores.symbolTable.SymbolTable;
-import br.ucsal.compiladores.utils.FileHandler;
-import br.ucsal.compiladores.utils.ReportGenerator;
 
 public class App {
 
-    private static class FileInputDetails {
-        String baseFileName;
-        String directoryPath;
-        String inputFilePath;
+    public static class FileInputDetails {
+        public String baseFileName;
+        public String directoryPath;
+        public String inputFilePath;
 
-        FileInputDetails(String baseFileName, String directoryPath, String inputFilePath) {
+        public FileInputDetails(String baseFileName, String directoryPath, String inputFilePath) {
             this.baseFileName = baseFileName;
             this.directoryPath = directoryPath;
             this.inputFilePath = inputFilePath;
@@ -51,8 +44,13 @@ public class App {
         }
 
         scanner.close();
-
-        processFile(fileDetails);
+        try {
+            Parser parser = new Parser();
+            parser.run(fileDetails);
+        } catch (Exception e) {
+            System.err.println("Ocorreu um erro fatal durante a execução: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private static void displayMenu() {
@@ -103,6 +101,9 @@ public class App {
             case 3:
                 System.out.print("Informe o caminho (completo ou relativo) para o arquivo (extensão .251 opcional): ");
                 String userInputPath = scanner.nextLine().trim();
+                if (userInputPath.startsWith("\"") && userInputPath.endsWith("\"")) {
+                    userInputPath = userInputPath.substring(1, userInputPath.length() - 1);
+                }
                 if (userInputPath.isEmpty()) {
                     System.err.println("Caminho do arquivo não pode ser vazio.");
                     return null;
@@ -129,7 +130,7 @@ public class App {
                 baseFileName = fileNameWithExt.substring(0, fileNameWithExt.length() - 4);
 
                 Path parentDir = absolutePathToTest.getParent();
-                directoryPath = (parentDir != null) ? parentDir.toString() : Constants.APP_ROOT_DIRECTORY;
+                directoryPath = (parentDir != null) ? parentDir.toString() : ".";
 
                 System.out.println("Usando arquivo: " + inputFilePath);
                 return new FileInputDetails(baseFileName, directoryPath, inputFilePath);
@@ -140,40 +141,6 @@ public class App {
             default:
                 System.err.println("Opção inválida. Tente novamente.");
                 return null;
-        }
-    }
-
-    private static void processFile(FileInputDetails fileDetails) {
-        if (fileDetails.baseFileName == null || fileDetails.inputFilePath == null) {
-            System.err.println("Erro fatal: Detalhes do arquivo não configurados corretamente antes de processar.");
-            return;
-        }
-
-        try {
-            FileHandler fileHandler = new FileHandler(fileDetails.baseFileName, fileDetails.directoryPath);
-            System.out.println("Arquivo a ser processado: " + fileHandler.getFilePath());
-
-            SymbolTable symbolTable = new SymbolTable();
-            Lexer lexer = new Lexer(fileHandler, symbolTable);
-            List<Token> tokens = lexer.tokenize();
-
-            System.out.println("\nTokens encontrados:");
-            for (Token token : tokens) {
-                System.out.println(token.toString());
-            }
-
-            Parser parser = new Parser(tokens, symbolTable);
-            parser.check();
-
-            ReportGenerator reportGenerator = new ReportGenerator(symbolTable, tokens, fileHandler.getFilePath());
-            reportGenerator.generateLexReport();
-            reportGenerator.generateTabReport();
-
-        } catch (IOException e) {
-            System.err.println("Erro de E/S: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("Erro inesperado durante a análise: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }

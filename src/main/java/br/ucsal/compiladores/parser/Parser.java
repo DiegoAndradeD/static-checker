@@ -1,18 +1,23 @@
 package br.ucsal.compiladores.parser;
 
+import br.ucsal.compiladores.App.FileInputDetails;
+import br.ucsal.compiladores.lexer.Lexer;
 import br.ucsal.compiladores.lexer.Token;
 import br.ucsal.compiladores.lexer.TokenType;
 import br.ucsal.compiladores.symbolTable.Symbol;
 import br.ucsal.compiladores.symbolTable.SymbolTable;
+import br.ucsal.compiladores.utils.FileHandler;
+import br.ucsal.compiladores.utils.ReportGenerator;
 
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 
 public class Parser {
-    private final List<Token> tokens;
-    private final SymbolTable symbolTable;
+    private List<Token> tokens;
+    private SymbolTable symbolTable;
     private int currentTokenIndex;
     private Token currentToken;
 
@@ -24,6 +29,56 @@ public class Parser {
         TYPE_SPEC_TO_DATA_TYPE_MAP.put(TokenType.PRS_BOOLEAN, "BL");
         TYPE_SPEC_TO_DATA_TYPE_MAP.put(TokenType.PRS_CHARACTER, "CH");
         TYPE_SPEC_TO_DATA_TYPE_MAP.put(TokenType.PRS_VOID, "VD");
+    }
+
+    public Parser() {
+    }
+
+    public void run(FileInputDetails fileDetails) {
+        if (fileDetails == null || fileDetails.baseFileName == null || fileDetails.inputFilePath == null) {
+            System.err.println("Erro: Detalhes do arquivo não configurados corretamente antes de processar.");
+            return;
+        }
+
+        try {
+            FileHandler fileHandler = new FileHandler(fileDetails.baseFileName, fileDetails.directoryPath);
+            System.out.println("Arquivo a ser processado: " + fileHandler.getFilePath());
+
+            this.symbolTable = new SymbolTable();
+
+            Lexer lexer = new Lexer(fileHandler, this.symbolTable);
+            this.tokens = lexer.tokenize();
+
+            System.out.println("\nTokens encontrados:");
+            for (Token token : tokens) {
+                System.out.println(token.toString());
+            }
+
+            initializeParserState();
+
+            this.check();
+
+            ReportGenerator reportGenerator = new ReportGenerator(this.symbolTable, this.tokens,
+                    fileHandler.getFilePath());
+            reportGenerator.generateLexReport();
+            reportGenerator.generateTabReport();
+            System.out.println("\nRelatórios gerados com sucesso!");
+
+        } catch (IOException e) {
+            System.err.println("Erro de E/S: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Erro inesperado durante a análise: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeParserState() {
+        this.currentTokenIndex = 0;
+        if (this.tokens != null && !this.tokens.isEmpty()) {
+            this.currentToken = this.tokens.get(currentTokenIndex);
+        } else {
+            this.currentToken = new Token(TokenType.END_OF_FILE, "", 0, 0);
+        }
     }
 
     public Parser(List<Token> tokens, SymbolTable symbolTable) {
@@ -134,7 +189,8 @@ public class Parser {
             if (dataType.equals("ERR_ARRAY_OF_VOID")) {
                 System.err.println("Erro Semântico: Declaração de array do tipo VOID não é permitida na linha "
                         + typeSpecToken.getLine());
-                while (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.END_OF_FILE) {
+                while (currentToken.getType() != TokenType.SRS_SEMICOLON
+                        && currentToken.getType() != TokenType.END_OF_FILE) {
                     advance();
                 }
                 if (match(TokenType.SRS_SEMICOLON))
@@ -317,7 +373,8 @@ public class Parser {
         } else {
             System.err.println("Erro Sintático: Esperado ':=' após variável '" + variableToken.getLexeme() +
                     "' no comando de atribuição na linha " + variableToken.getLine());
-            while (currentToken.getType() != TokenType.SRS_SEMICOLON && currentToken.getType() != TokenType.END_OF_FILE) {
+            while (currentToken.getType() != TokenType.SRS_SEMICOLON
+                    && currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
         }
@@ -447,7 +504,8 @@ public class Parser {
 
         if (!match(TokenType.SRS_LEFT_PARENTHESIS)) {
             System.err.println("Erro Sintático: Esperado '(' após WHILE na linha " + whileToken.getLine());
-            while (currentToken.getType() != TokenType.PRS_ENDWHILE && currentToken.getType() != TokenType.END_OF_FILE) {
+            while (currentToken.getType() != TokenType.PRS_ENDWHILE
+                    && currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
             if (match(TokenType.PRS_ENDWHILE))
@@ -463,7 +521,8 @@ public class Parser {
         if (!match(TokenType.SRS_RIGHT_PARENTHESIS)) {
             System.err.println("Erro Sintático: Esperado ')' para fechar condição do WHILE na linha "
                     + whileToken.getLine() + ". Encontrado: " + currentToken);
-            while (currentToken.getType() != TokenType.PRS_ENDWHILE && currentToken.getType() != TokenType.END_OF_FILE) {
+            while (currentToken.getType() != TokenType.PRS_ENDWHILE
+                    && currentToken.getType() != TokenType.END_OF_FILE) {
                 advance();
             }
             if (match(TokenType.PRS_ENDWHILE))
